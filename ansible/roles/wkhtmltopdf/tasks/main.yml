@@ -1,0 +1,11 @@
+---
+- name: install base fonts
+  yum: name={{ item }} state=present
+  with_items:
+    - libXrender
+    - libXext
+    - xorg-x11-fonts-75dpi
+    - xorg-x11-fonts-Type1
+
+- name: Install wkhtmltopdf rpm
+  yum: name=http://download.gna.org/wkhtmltopdf/0.12/{{ wkhtmltopdf_version }}/wkhtmltox-{{ wkhtmltopdf_version }}_linux-centos{{ ansible_distribution_major_version  }}-{{ "amd64" if ansible_architecture == "x86_64" else "i386"}}.rpm

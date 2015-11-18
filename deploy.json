@@ -1,0 +1,32 @@
+{
+    "builders": [
+        {
+            "type": "docker",
+            "image": "centos",
+            "export_path": "image.tar"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "yum install -y epel-release",
+                "yum install -y ansible"
+            ]
+        },
+        {
+            "type": "ansible-local",
+            "playbook_file": "ansible/playbook.yml",
+			"host_vars": "ansible/host_vars",
+            "playbook_dir": "ansible",
+            "role_paths": [
+                "ansible/roles"
+            ]
+        }
+    ],
+    "post-processors": [{
+        "type": "docker-import",
+        "repository": "erpnext",
+        "tag": "build-{{isotime \"020106\"}}"
+    }]
+}

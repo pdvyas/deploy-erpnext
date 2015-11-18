@@ -1,0 +1,101 @@
+---
+  - name: Apply basic roles  
+    hosts: all
+    user: root
+    vars:
+        - mysql_secure_installation: True
+    vars_files:
+        - vars.yml
+    tasks:
+        - name: Install the 'Development tools' package group (Redhat)
+          yum: name="@Development tools" state=present
+          when: ansible_os_family == 'RedHat'
+        - name: Install packages
+          yum: name={{ item }} state=present
+          with_items:
+            - git
+            - nginx
+            - zlib-devel
+            - bzip2-devel
+            - openssl-devel
+            - postfix
+            - python-devel
+            - mariadb
+            - redis
+            - libXrender
+            - libXext
+            - cronie
+            - sudo
+            - which
+            - xorg-x11-fonts-75dpi
+            - xorg-x11-fonts-Type1
+          when: ansible_os_family == 'RedHat'
+        - user: name=frappe
+        # - authorized_key: user=frappe key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        
+
+  - name: Clone bench
+    hosts: all
+    user: frappe
+    tasks:
+        - git:
+            repo=https://github.com/frappe/bench
+            dest=/home/frappe/bench-repo
+    # tags:
+    #   - bench
+                    
+
+  - name: Install bench
+    hosts: all
+    user: root
+    tasks:
+
+        - easy_install: name=pip executable=easy_install-2.7
+        - pip:          name=/home/frappe/bench-repo extra_args='-e'
+
+     
+  # - name: Setup bench
+  #   hosts: all
+  #   user: frappe
+  #   tasks:
+  #     - shell:
+  #         bench init /home/frappe/frappe-bench --apps_path https://gist.githubusercontent.com/anonymous/5ce5405e9e68f3756974/raw/eeb8c1a58922c1c02e8bf3182bcbc6f0ce918d70/apps.json --frappe-branch v5.0
+
+  
+  - name: Setup bench
+    hosts: all
+    become: yes
+    become_user: frappe
+    gather_facts: false
+    vars_files:
+        - vars.yml
+    tasks:
+      - bench:
+          path: /home/frappe/frappe-bench
+          frappe_branch: develop
+          apps:
+            - name: erpnext
+              url: https://github.com/frappe/erpnext
+              # branch: v5.0
+            - name: erpnext_demo
+              url: https://github.com/frappe/erpnext_demo
+              # branch: v5.0
+          mariadb_root_password: "{{ mysql_root_password if mysql_root_password is defined else hostvars['mysql_root_password'] }}"
+          sites:
+            - name: cexample.com
+              admin_password: admin
+              apps:
+                - erpnext
+            - name: demo.example.com
+              admin_password: admin
+              apps:
+                - erpnext
+                - erpnext_demo
+              site_config:
+                developer_mode: 1
+                nginx_port: 8080
+    tags:
+      - bench
+            
+
+  
