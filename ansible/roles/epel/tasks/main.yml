@@ -3,8 +3,10 @@
   yum:
     name: "{{ epel_repo_url }}"
     state: present
+  when: ansible_os_family == 'RedHat'
 
 - name: Import EPEL GPG key.
   rpm_key:
     key: "{{ epel_repo_gpg_key_url }}"
     state: present
+  when: ansible_os_family == 'RedHat'

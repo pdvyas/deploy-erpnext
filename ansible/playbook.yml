@@ -8,18 +8,10 @@
     vars_files:
         - vars.yml
     roles:
-        - locale
-        - swap
         - mariadb
         - epel
         - nginx
-        - logwatch
-        - fail2ban
-        - bash_screen_wall
-        - frappe_selinux
-        - dns_caching
-        - wkhtmltopdf
-        - ntpd
+        # - wkhtmltopdf
     tasks:
         - name: Install the 'Development tools' package group (Redhat)
           yum: name="@Development tools" state=present
@@ -68,6 +60,48 @@
             - tcl-devel
             - tk-devel
           when: ansible_os_family == 'RedHat'
+        - name: Install packages
+          apt: pkg={{ item }} state=present
+          with_items:
+            - python-dev
+            - python-setuptools
+            - build-essential
+            - python-mysqldb
+            - git
+            - ntp
+            - vim
+            - screen
+            - htop
+            - mariadb-server
+            - mariadb-common
+            - libmariadbclient-dev
+            - libxslt1.1
+            - libxslt1-dev
+            - redis-server
+            - libssl-dev
+            - libcrypto++-dev
+            - postfix
+            - nginx
+            - supervisor
+            - python-pip
+            - fontconfig
+            - libxrender1
+            - libxext6
+            - xfonts-75dpi
+            - xfonts-base
+            - nodejs
+            - npm
+            - libtiff5-dev
+            - libjpeg8-dev
+            - zlib1g-dev
+            - libfreetype6-dev
+            - liblcms2-dev
+            - libwebp-dev
+            - tcl8.6-dev
+            - tk8.6-dev
+            - python-tk
+          when: ansible_os_family == 'Debian'
+
         - user: name=frappe
     tags:
       - base_packages

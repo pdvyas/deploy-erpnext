@@ -20,3 +20,4 @@
   with_items:
     - mariadb-server
     - mariadb-client
+    - python-mysqldb

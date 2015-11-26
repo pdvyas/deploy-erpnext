@@ -45,7 +45,7 @@
 - name: Remove test database and access to it
   command: 'mysql -ne "{{ item }}"'
   with_items:
-    - DROP DATABASE test
+    - DROP DATABASE if exists test
     - DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'
   changed_when: False
   ignore_errors: True
