@@ -1,7 +1,7 @@
 addons:
   apt:
     packages:
-    - virtualbox-qt
+    - virtualbox
 
 script:
     - cd $TRAVIS_BUILD_DIR
