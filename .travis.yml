@@ -1,5 +1,8 @@
-install:
-    - sudo apt-get install virtualbox-qt
+addons:
+  apt:
+    packages:
+    - virtualbox-qt
+
 script:
     - cd $TRAVIS_BUILD_DIR
     - ./packer build frappe.json
