@@ -1,7 +1,5 @@
-addons:
-  apt:
-    packages:
-    - virtualbox
+install:
+    - sudo apt-get install virtualbox
 
 script:
     - cd $TRAVIS_BUILD_DIR
