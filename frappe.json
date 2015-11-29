@@ -11,13 +11,13 @@
 		"ssh_port": 22,
 		"ssh_wait_timeout": "300s",
 		"export_opts": ["--vsys", "0", "--product", "ERPNext", "--producturl", "https://erpnext.com", "--vendor", "Frappe Techonologies", "--vendorurl", "https://frappe.io", "--description", "ERPNext Evaluation VM"],
-		"shutdown_command": " echo 'packer' | sudo shutdown -P -h now"
-	},
-	"vboxmanage": [
-		[ "modifyvm", "{{.Name}}", "--memory", "512" ],
-		[ "modifyvm", "{{.Name}}", "--audio", "none" ],
-		[ "modifyvm", "{{.Name}}", "--cpus", "1" ]
-	],
+		"shutdown_command": " echo 'packer' | sudo shutdown -P -h now",
+		"vboxmanage": [
+			[ "modifyvm", "{{.Name}}", "--memory", "512" ],
+			[ "modifyvm", "{{.Name}}", "--audio", "none" ],
+			[ "modifyvm", "{{.Name}}", "--cpus", "1" ]
+		]
+	}
 			   ],
 	"provisioners": [{
 		"type": "shell",
