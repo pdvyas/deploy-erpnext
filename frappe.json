@@ -1,0 +1,30 @@
+{
+	"builders":[{
+		"vm_name": "ERPNext-{{isotime \"020106\"}}",
+		"type": "virtualbox-ovf",
+		"format": "ova",
+		"headless": true,
+		"source_path": "base.ova",
+		"ssh_username": "frappe",
+		"ssh_password": "frappe",
+		"guest_additions_mode": "disable",
+		"ssh_port": 22,
+		"ssh_wait_timeout": "300s",
+		"export_opts": ["--vsys", "0", "--product", "ERPNext", "--producturl", "https://erpnext.com", "--vendor", "Frappe Techonologies", "--vendorurl", "https://frappe.io", "--description", "ERPNext Evaluation VM"],
+		"shutdown_command": " echo 'packer' | sudo shutdown -P -h now"
+	}],
+	"provisioners": [{
+		"type": "shell",
+		"script": "scripts/install_ansible.sh"
+	}, {
+		"type": "ansible-local",
+		"playbook_file": "ansible/playbook.yml",
+		"playbook_dir": "ansible",
+		"role_paths": [
+			"ansible/roles"
+		]
+	}, {
+		"type": "shell",
+		"script": "scripts/zerofree.sh"
+	}]
+}

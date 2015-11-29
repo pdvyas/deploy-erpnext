@@ -1,7 +1,8 @@
 ---
   - name: Apply basic roles  
     hosts: all
-    user: root
+    become: yes
+    become_user: root
     vars:
         - mysql_secure_installation: True
         - mysql_conf_tpl: mariadb_config.cnf
@@ -120,7 +121,8 @@
 
   - name: Install bench
     hosts: all
-    user: root
+    become: yes
+    become_user: root
     tasks:
 
         - easy_install: name=pip executable=easy_install-2.7
@@ -133,6 +135,7 @@
     hosts: all
     become: yes
     become_user: frappe
+    become_method: sudo
     gather_facts: false
     vars_files:
         - vars.yml
