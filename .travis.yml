@@ -1,8 +1,6 @@
-install:
-    - sudo apt-get update
-    - sudo apt-get install virtualbox
+services:
+  - docker
 
 script:
     - cd $TRAVIS_BUILD_DIR
-    - wget https://github.com/pdvyas/deploy-erpnext/releases/download/0.01/base.ova
-    - ./packer build frappe.json
+    - ./packer build deploy.json
