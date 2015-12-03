@@ -5,12 +5,12 @@
     become_user: root
     vars:
         - mysql_secure_installation: True
-        - mysql_conf_tpl: mariadb_config.cnf
+        - mysql_conf_tpl: templates/mariadb_config.cnf
+        - nginx_conf_file: templates/nginx.cnf
     vars_files:
         - vars.yml
     roles:
         - mariadb
-        - epel
         - nginx
         # - wkhtmltopdf
     tasks:
