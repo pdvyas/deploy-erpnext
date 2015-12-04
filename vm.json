@@ -32,6 +32,9 @@
 		]
 	}, {
 		"type": "shell",
+		"script": "scripts/set_message.sh"
+	}, {
+		"type": "shell",
 		"script": "scripts/zerofree.sh"
 	}]
 }
