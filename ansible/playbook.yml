@@ -6,13 +6,13 @@
     vars:
         - mysql_secure_installation: True
         - mysql_conf_tpl: templates/mariadb_config.cnf
-        - nginx_conf_file: templates/nginx.cnf
+        - nginx_conf_file: templates/nginx.conf
     vars_files:
         - vars.yml
     roles:
         - mariadb
         - nginx
-        # - wkhtmltopdf
+        - wkhtmltopdf
     tasks:
         - name: Install the 'Development tools' package group (Redhat)
           yum: name="@Development tools" state=present
@@ -106,7 +106,6 @@
         - user: name=frappe
     tags:
       - base_packages
-        # - authorized_key: user=frappe key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
         
 
   - name: Clone bench
@@ -146,18 +145,12 @@
           apps:
             - name: erpnext
               url: https://github.com/frappe/erpnext
-              # branch: v5.0
             - name: erpnext_demo
               url: https://github.com/frappe/erpnext_demo
-              # branch: v5.0
-          mariadb_root_password: "{{ mysql_root_password if mysql_root_password is defined else hostvars['mysql_root_password'] }}"
+          mariadb_root_password: "{{ mysql_root_password }}"
           sites:
-            - name: cexample.com
-              admin_password: admin
-              apps:
-                - erpnext
-            - name: demo.example.com
-              admin_password: admin
+            - name: erpnext.vm
+              admin_password: {{ admin_password or 'admin' }}
               apps:
                 - erpnext
     tags:
