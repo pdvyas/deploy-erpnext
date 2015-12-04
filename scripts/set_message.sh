@@ -13,5 +13,5 @@ message="
  cd frappe-bench
  bench update
 "
-echo "$message" >> /etc/issue
-echo "$message" >> /etc/motd
+echo "$message" | sudo tee -a /etc/issue
+echo "$message" | sudo tee -a /etc/motd
